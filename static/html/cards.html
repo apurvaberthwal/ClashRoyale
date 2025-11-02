@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Cards - Clash Royale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .nav-bar {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .cards-hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cards-hero h1 {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .cards-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .cards-hero h1 { font-size: 2rem; }
+            .nav-links { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="/" class="nav-logo">⚔️ Clash Royale</a>
+            <div class="nav-links">
+                <a href="/player" class="nav-link">Player</a>
+                <a href="/clan" class="nav-link">Clan</a>
+                <a href="/cards" class="nav-link active">Cards</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Cards Hero Section - Auto-loads on page load -->
+        <div class="cards-hero">
+            <h1>🃏 All Clash Royale Cards</h1>
+            <p>Browse the complete collection of cards with images, stats, and details</p>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading cards...</p>
+        </div>
+
+        <!-- Results -->
+        <main id="result" class="result"></main>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/keep-alive.js"></script>
+    <script>
+        // Auto-load cards when page loads
+        async function loadCards() {
+            ui.showLoading();
+            ui.clearResult();
+
+            try {
+                const data = await api.fetchAllCards();
+                ui.renderAllCards(data);
+            } catch (error) {
+                ui.showError(error.message);
+            } finally {
+                ui.hideLoading();
+            }
+        }
+
+        // Load cards on page load
+        document.addEventListener('DOMContentLoaded', loadCards);
+    </script>
+</body>
+</html>
